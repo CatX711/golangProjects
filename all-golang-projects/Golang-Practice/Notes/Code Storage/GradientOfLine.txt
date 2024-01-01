@@ -1,0 +1,46 @@
+package main
+
+import(
+	"fmt"
+)
+
+// calc for gradient:
+//
+// y2 - y1
+// -------
+// x2 - x1
+
+func main(){
+	var x1 int
+	var x2 int
+	var y1 int
+	var y2 int
+
+	var coord1 = []int{}
+	var coord2 = []int{}
+
+	fmt.Printf("Provide X1: ")
+	fmt.Scan(&x1)
+	fmt.Printf("Provide X2: ")
+	fmt.Scan(&x2)
+
+	coord1 = append(coord1, x1)
+	coord1 = append(coord1, x2)
+
+	fmt.Println("\n\nCoordinate 1: (", coord1[0], ",", coord1[1], ")")
+
+	fmt.Printf("\n\nProvide Y1: ")
+	fmt.Scan(&y1)
+	fmt.Printf("Provide Y2: ")
+	fmt.Scan(&y2)	
+
+	coord2 = append(coord2, y1)
+	coord2 = append(coord2, y2)
+
+	fmt.Println("\n\nCoordinate 2: (", coord2[0], ",", coord2[1], ")")	
+
+	gradient := (y2 - y1) / (x2 - x1)
+
+	fmt.Println("\n\n\n\nGradient of your straight line:", gradient)
+
+}

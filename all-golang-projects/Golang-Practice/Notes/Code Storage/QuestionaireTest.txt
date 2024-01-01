@@ -1,0 +1,27 @@
+package main 
+
+import (
+	"fmt"
+	"strings"
+)
+
+func main() {
+	var name string
+	var age int
+	var programmingLanguage string
+
+	fmt.Println("Welcome! Let's get to know you.")
+	fmt.Print("What's your name? ")
+	fmt.Scanln(&name)
+
+	fmt.Printf("Nice to meet you, %s!\n", name)
+	fmt.Print("How old are you? ")
+	fmt.Scanln(&age)
+
+	fmt.Printf("Great, %s! %d years old. \n", name, age)
+	fmt.Print("What programming language are you interested in? ")
+	fmt.Scanln(&programmingLanguage)
+
+	fmt.Printf("Awesome! %s sounds exciting.\n", strings.Title(programmingLanguage))
+	fmt.Println("Enjoy your coding journey!")
+}

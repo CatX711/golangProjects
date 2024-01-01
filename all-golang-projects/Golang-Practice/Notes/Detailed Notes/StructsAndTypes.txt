@@ -1,0 +1,232 @@
+See: https://www.youtube.com/watch?v=dm9oXt6_YNA&list=PLzMcBGfZo4-mtY_SE3HuzQJzuj4VlUG0q&index=20
+
+
+Structs are like classes. They contain different fields
+that a variable can have, providing a structure.
+
+Normally variables are defined somewhat like this:
+
+
+func main(){
+    var x int = 5
+}
+
+
+But with custom types (structs) it would be like this:
+
+// Point is a custom type with 2 fields
+type Point struct {
+    x-Value int     // field 1
+    y-Value int     // field 2
+}
+
+func main(){
+    var p1 Point = Point{36, 4}
+}
+
+
+This basically means "p1 is a new Point with x-Value equal to 36 
+and y-Value equal to 4".
+Multiple variables can have their own values for the fields in a struct.
+
+
+type Point struct {
+    x-Value int     
+    y-Value int     
+}
+
+func main(){
+    var p1 Point = Point{36, 4}
+    var p2 Point = Point{-5, 7}
+}
+
+
+How to print them out:
+
+fmt.Println(p1.x-Value) // 36
+fmt.Println(p2.y-Value) // 7
+
+
+Variables with a custom type can be written with the type inference
+operator, like this:
+
+func main(){
+    p1 := Point{36, 4}
+    p2 := Point{-5, 7}
+}
+
+Assigning Point to p2 and giving it values doesnt actually change the 
+values of p1, so multiple variables can all have a Point type and not change
+eachother. Just like two ints wouldnt change eachother's values.
+
+
+You can set specifc fields in a variable without getting an error like this:
+
+p1 := Point{x-Value: 0} 
+
+Now the rest of the undefined fields will be their default value, for a string 
+empty quotation marks, an integer 0. This can be done with multiple fields.
+
+
+It's also possible to change the value of a variable with a custom
+type mid program, for example like this:
+
+
+func main(){
+    var p1 Point = Point{36, 4}
+    var p2 Point = Point{-5, 7}
+
+    p1.x-Value = 2 // no longer 36
+}
+
+
+These struct fields dont all need to be the same type, as well.
+Point could contain x-Value and y-Value which are both integers,
+as well as booleans and structs and arrays etc.
+
+type Point struct {
+    x-Value int     
+    y-Value int  
+
+    isOnGrid bool   
+}
+
+func main(){
+    var p1 Point = Point{36, 4, false}
+    var p2 Point = Point{-5, 7, true}
+}
+
+
+Structs can even have fields with types of other structs!
+For example:
+
+
+type gasEngine struct{
+    milesPerGallon uint8
+    gallons uint8
+    ownerInfo owner 
+}
+
+type owner struct{
+    name string 
+}
+
+func main(){
+    var myEngine gasEngine = gasEngine{25, 15, owner{"Alex"}}
+    fmtPrintln(myEngine.milesPerGallon, myEngine.gallons, myEngine.ownerInfo.name)
+}
+
+
+
+Graphical representation of the info in myEngine var:
+
+
+myEngine{
+    milesPerGallon: 25
+    gallons:        15
+    ownerInfo.name: "Alex"
+}
+
+
+
+If we dont want to write "myEngine.ownerInfo.name" (let's be honest, thats too long)
+then we can change the gasEngine struct to be this:
+
+type gasEngine struct{
+    milesPerGallon uint8
+    gallons uint8
+    owner 
+}
+
+
+
+Now we can write myEngine.name instead of what we used to write.
+The data inside myEngine now looks like this:
+
+myEngine{
+    milesPerGallon: 25
+    gallons:        15
+    name: "Alex"
+}
+
+
+
+Anonymous structs:
+Declaired inside main func, not reusable.
+
+
+func main(){
+    var myEngine2 = struct{
+        mpg uint8 
+        gallons uint8
+    }{25, 15} // values given here
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Structs can also be used in functions.
+Pointers are useful when working with functions and structs.
+
+
+Won't work:
+
+
+type Point struct {
+    x-Value int     
+    y-Value int  
+}
+
+func changeX(pt Point){
+    pt.x = 100
+}
+
+func main(){
+    var p1 Point = Point{36, 4, false}
+    var p2 Point = Point{-5, 7, true}
+}
+
+
+Will work:
+
+type Point struct {
+    x-Value int     
+    y-Value int  
+}
+
+// * dereferences memory address so changes to var can me made
+func changeX(pt *Point){
+    pt.x = 100
+}
+
+func main(){
+    // & passes memory address of parameter to function 
+    var p1 Point = &Point{36, 4, false}
+    var p2 Point = Point{-5, 7, true}
+}
+
+
+
+Interfaces:
+
+
+no duckin clue bro

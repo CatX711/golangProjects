@@ -1,0 +1,26 @@
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	myslice := []int{}
+
+	mymap := map[string]int{
+		"element1": 86,
+		"element2": 33,
+	}
+
+	// call func to append values in map to myslice
+	myslice = appendMap(myslice, mymap) 
+	
+	fmt.Println("Slice:", myslice) // [33 86]
+}
+
+func appendMap(slice []int, m map[string]int) []int {
+	for _, v := range m {
+		slice = append(slice, v)
+	}
+	return slice
+}

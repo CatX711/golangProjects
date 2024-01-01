@@ -1,0 +1,233 @@
+Let's say we have a program that gets the value of all the
+elements of an array and adds them together.
+Pretty simple.
+
+func main(){
+    var intSlice = []int{1, 2, 3}
+    fmt.Println(sumIntSlice(intSlice))
+}
+
+func sumIntSlice(slice []int) int{
+    var sum int
+    for _, v := range slice{
+        sum += v // if array was {1, 3, 9} sum would be 13
+    }
+    return sum
+}
+
+
+Nice.
+Now we want to do this for float slices.
+
+func main(){
+    var intSlice = []int{1, 2, 3}
+    fmt.Println(sumIntSlice(intSlice))
+}
+
+func sumIntSlice(slice []int) int{
+    var sum int
+    for _, v := range slice{
+        sum += v 
+    }
+    return sum
+}
+
+func sumFloat32Slice(slice []float32) float32{
+    var sum float32
+    for _, v := range slice{
+        sum += v 
+    }
+    return sum
+}
+
+func sumFloat64Slice(slice []float64) float64{
+    var sum float64
+    for _, v := range slice{
+        sum += v 
+    }
+    return sum
+}
+
+Well, this program is starting to get pretty big, isnt it?
+And there's a lot of repeated code! That's why we use generics,
+a way of doing multiple different things with one function depending on
+what type you specify you want to use.
+Here's an example:
+
+
+
+func main(){
+    var intSlice = []int{1, 2, 3}
+    fmt.Println(sumSlice[int](intSlice)) // 6
+
+
+    var floatSlice = []float32{2.1, 3.14159, 9.3}
+    fmt.Println(sumSlice[float32](floatSlice))
+}
+    
+func sumSlice[Type int | float32 | float64](slice []Type) Type{
+    var sum Type
+    for _, v := range slice{
+        sum += v 
+    }
+    return sum
+}
+
+// output:
+// 6
+// 14.54159
+
+
+
+See? Much easier. By the way, you dont need to write Type,
+it could be named anything, for example T or X or even "hdak"
+
+package main
+
+import "fmt"
+
+func main(){
+    var intSlice = []int{1, 2, 3}
+    fmt.Println(sumSlice[int](intSlice)) // 6
+
+
+    var floatSlice = []float32{2.1, 3.14159, 9.3}
+    fmt.Println(sumSlice[float32](floatSlice))
+}
+    
+func sumSlice[hdak int| float32 | float64](slice []hdak) hdak{
+    var sum hdak
+    for _, v := range slice{
+        sum += v 
+    }
+    return sum
+}
+
+// output:
+// 6
+// 14.54159
+
+
+
+There's also an any keyword, whih allows for all types.
+For example, we can use this to check the length of a slice with
+any type instead of creating a function for each specific type.
+
+
+
+func main(){
+
+    var myslice = []string{}
+    var myslice2 = []int{}
+
+    fmt.Println(isEmpty[string](myslice))
+    fmt.Println(isEmpty[int](myslice2))
+}
+
+
+func isEmpty[T any](slice []T) bool{
+    // will say if this statement is true or false
+    return len(slice) == 0
+}
+
+// output:
+// true
+// true
+
+
+
+func main(){
+
+    var myslice = []string{"hello"}
+    var myslice2 = []int{5}
+    var myslice3 = []float64{}
+
+    fmt.Println(isEmpty[string](myslice))
+    fmt.Println(isEmpty[int](myslice2))
+    fmt.Println(isEmpty[float64](myslice3))
+}
+
+
+func isEmpty[T any](slice []T) bool{
+    return len(slice) == 0
+}
+
+// output:
+// false
+// false
+// true
+
+
+The Go compiler is smart enough to auto type infer so you
+dont even need to specify the type if you want.
+
+func main(){
+
+    var myslice = []string{"hello"}
+    var myslice2 = []int{5}
+
+    fmt.Println(isEmpty(myslice))
+    fmt.Println(isEmpty(myslice2))
+}
+
+
+func isEmpty[T any](slice []T) bool{
+    return len(slice) == 0
+}
+
+// output:
+// false
+// false
+
+
+Here's another example of useful generics:
+Let's say we want to create a package for math called mymathmodule.
+In it we define functions to add different types. All float types, int types.
+Instead of combining them all into one function, we can create two seperate functions
+called addInt and addFloat. Splitting them just makes it easier
+for anyone using our package.
+
+
+
+func main() {
+	var x int = 32
+	var b float32 = 32.1
+
+	fmt.Println(addInt(x, x))
+	fmt.Println(addFloat(b, b))
+}
+
+func addInt[Type int | int32 | int64 | uint](number, number2 Type) Type{
+	return number + number2
+}
+
+func addFloat[Type float32 | float64](floatnum, floatnum2 Type) Type{
+	return floatnum + floatnum2
+}
+
+
+
+
+You can also use structs in functions that use generics.
+Here's an example:
+
+
+type Person struct {
+	Name string
+	Age  int
+}
+
+// generic function that operates on a specific struct
+func printPersonInfo[T Person](s T) {
+	fmt.Printf("Name: %s, Age: %d\n", s.Name, s.Age)
+}
+
+func main() {
+	// Create an instance of the Person struct
+	person := Person{Name: "Alice", Age: 30}
+
+	// Use the generic function with the Person struct
+	printPersonInfo(person)
+}
+
+

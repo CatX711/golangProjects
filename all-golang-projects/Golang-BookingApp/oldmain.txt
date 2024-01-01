@@ -1,0 +1,159 @@
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+// NOTE: KEYBINDS - COMMAND + Z = UNDO, COMMAND + Z + SHIFT = REDO
+
+func main() {
+	// variables
+	var confname string = "Golang Conference"
+	const conferenceTickets int = 50
+	var remainingtickets uint = 50 // uint cannot be negative (unsigned int)
+	var ticketValue float32 = 5.20
+
+	// var bookings = [50]string{"Daniel", "Dumitru", "Ramona", "Milo"}
+	bookings := []string{} // slice, can be written		var bookings = []string
+
+	// you can set specific conditions for the for loop to continue
+	// e.g only continue while remainingtickets > 0 or length of bookings is < 50 or even both!
+	// for remainingTickets > 0 && len(bookings) < 50{}
+	for { // infinite loop - can be written `for true{}` as well
+		var firstname string
+		var lastname string
+		var email string
+		var userTickets uint
+
+		greetUsers(confname, conferenceTickets, remainingtickets)
+
+		// ask user for data
+		fmt.Printf("\n\n\nEnter Your First Name Here: ")
+		fmt.Scan(&firstname)
+		fmt.Printf("\nEnter Your Last Name Here: ")
+		fmt.Scan(&lastname)
+		fmt.Println("\nPlease provide your email address: ")
+		fmt.Scan(&email)
+
+		fmt.Println("\nHow many tickets do you want to purchase? ")
+		fmt.Scan(&userTickets)
+
+		// these variables got moved from the main function into validateuserinput earlier,
+		// so we add them back into main by assigning them to the returned values of validateuserinput
+		// in order. this means they are all bools and have their values back	
+		isValidName, isValidEmail, isValidTicketNum := validateUserInput(firstname, lastname, email, userTickets, remainingtickets)
+
+
+
+		/*
+			isValidCity := city == "Singapore" || city == "London" // || means or
+			!isValidCity // reverses boolean values, so checks if neither singapore nor london was entered
+			!isValidCity is the same as ` isValidCity := city != "Singapore" || city != "London" `
+		*/
+
+		if isValidName && isValidEmail && isValidTicketNum { // only if all these values are true can this run
+
+			bookings = append(bookings, firstname+" "+lastname) // <-- before bookings became a slice this code was written as: bookings[0] = userName
+
+			// totalcost must be calculated after userTickets and userName have been scanned otherwise it will break and output 0.00
+			totalCost := float32(userTickets) * ticketValue // convert int value userTickets to float otherwise calculation will not work
+			remainingtickets = remainingtickets - userTickets
+
+			/*
+				fmt.Printf("\n\n\nThe whole slice: %v\n", bookings)
+				fmt.Printf("The first value in slice: %v\n", bookings[0])
+				fmt.Printf("Slice type: %T\n", bookings)
+				fmt.Printf("Slicelength: %v\n\n\n\n", len(bookings)) // len is built in function to get length of variable or array or map or whateva
+			*/
+
+			fmt.Printf("Thank you for booking %v tickets! You will receive a confirmation email at: %v\n\n\n", userTickets, email)
+
+			fmt.Println("Global announcement:")
+			fmt.Printf("User \"%v\" has booked %v tickets for £%.2f. %v remain, order while supplies last!\n", firstname+" "+lastname, userTickets, totalCost, remainingtickets)
+
+			firstNames := getfirstname(bookings) // you can store the return value of a function inside a variable
+			fmt.Printf("The first names of bookings are: %v\n", firstNames)
+
+			// check if remaining tickets is 0
+			if remainingtickets == 0 {
+				// end program
+				fmt.Println("\n\nOur conference is booked out. Come back next week!")
+				break // ends the infinite for loop and subsequentially the program
+			}
+
+		} else {
+			if !isValidName {
+				fmt.Println("\n\nOur servers cannot process your request, as your input data is invalid. Please try again.")
+				fmt.Println("HTTP://ERROR - 426[Q]: First name or last name you entered is too short. Minimum character limit: 2")
+			}
+			if !isValidEmail {
+				fmt.Println("\n\nOur servers cannot process your request, as your input data is invalid. Please try again.")
+				fmt.Println("HTTP://ERROR - 403[Q]: Email address does not contain @ sign.")
+			}
+			if !isValidTicketNum {
+				fmt.Println("\n\nOur servers cannot process your request, as your input data is invalid. Please try again.")
+				fmt.Println("HTTP://ERROR - INT:OVERFLOW[]: Number of tickets you entered is invalid.")
+			}
+
+			// the reason we dont use else in this code block is because:
+			// if we provide multiple invalid values, two or all of the if statements
+			// will print, but if we used else it would be one per instance of program.
+			// we'd need to restart to get a new one
+		}
+
+	}
+}
+
+// confname takes up conf, ticket takes up conferenceTickets, remainingTickets takes up remticks
+func greetUsers(conf string, ticket int, remticks uint) {
+	fmt.Println("\n\nWelcome to our", conf, "booking application!")
+	fmt.Println("We have a total of", ticket, "tickets and currently,", remticks, "remain.")
+	fmt.Println("Claim your tickets now to be able to attend.")
+}
+
+// firstNames is a slice, and we're returning it so we return it like this: []string
+func getfirstname(bookings []string) []string { // bookings is a slice so its defined like this in the parameters
+	//::::::::::::: input parameters  output parameters
+
+	// for privacy we want to remove the last name of our buyers
+	// when we show the buyer list, this is what the for loop does
+	firstNames := []string{}
+	for _, booking := range bookings { // booking is value of elements in bookings
+		var names = strings.Fields(booking) // array containing two values (first name and last name)
+		firstNames = append(firstNames, names[0])
+	}
+
+	return firstNames
+}
+																						// when we have multiple return types we put them in their own parenthasis 
+func validateUserInput(fname string, lname string, em string, userticks uint, remticks uint) (bool, bool, bool){ // go lets you return as many values as you want
+	// both firstname and lastname must be two characters long
+	// if firstname is valid and lastname is not and vice versa, the program will not run
+	
+	// all inferred to be booleans
+	isValidName := len(fname) >= 2 && len(lname) >= 2
+	isValidEmail := strings.Contains(em, "@") // makes sure email contains @ using strings module
+	isValidTicketNum := userticks > 0 && userticks <= remticks
+
+	return isValidName, isValidEmail, isValidTicketNum
+}
+
+
+/*
+--------------------------------------------------------------------
+(Confname is already defined)
+
+func greetUsers(confname string){
+	fmt.Println("Welcome to %v booking application", confname)
+}
+--------------------------------------------------------------------
+(This also works because you can call the parameter whatever you want)
+(Does same thing)
+
+func greetUsers(blabla string){
+	fmt.Println("Welcome to %v booking application", blabla)
+}
+--------------------------------------------------------------------
+*/
+

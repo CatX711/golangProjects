@@ -1,0 +1,15 @@
+package main
+
+import(
+	"os"
+	"io"
+)
+
+func main(){
+	file, _ := os.Create("Hello.txt")
+	_, _ = io.WriteString(file, "Hello World")
+	file.Close()
+}
+
+
+// creates file called Hello with "Hello World" inside

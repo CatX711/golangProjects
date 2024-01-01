@@ -1,0 +1,114 @@
+package main
+
+// tutorial: https://www.youtube.com/watch?v=yyUHQIec83I
+// i finished :D
+
+import (
+	"fmt"
+	"strings"
+	"time"
+)
+
+func main() {
+	var confname string = "Golang Conference"
+	const conferenceTickets int = 50
+	var remainingTickets uint = 50
+	// var bookings [50]string // as an array
+	var bookings []string // as slice
+
+	// imported from helper.go which is in the same package as this file
+	greetuser(confname, conferenceTickets, remainingTickets)
+
+	for {
+		// user variables
+		var firstname string
+		var lastname string
+		var email string
+		var usertickets uint
+
+		// get user input
+		fmt.Printf("\n\nPlease provide your first name: ")
+		fmt.Scan(&firstname)
+		fmt.Printf("\nPlease provide your last name: ")
+		fmt.Scan(&lastname)
+		fmt.Printf("\nPlease provide your email address: ")
+		fmt.Scan(&email)
+		fmt.Printf("\nPlease enter how many tickets you would like to purchase: ")
+		fmt.Scan(&usertickets)
+
+		// name is only valid if both firstname and lastname are more or qual to 2 in length
+		var isValidName bool = len(firstname) >= 2 && len(lastname) >= 2
+		var isValidEmail bool = strings.Contains(email, "@")
+		var isValidTickets bool = usertickets > 0 && usertickets <= remainingTickets
+
+		if isValidName && isValidEmail && isValidTickets { // if all are true
+			// ticket calculation
+			remainingTickets = remainingTickets - usertickets
+
+			// add input to bookings array
+			bookings = append(bookings, firstname+" "+lastname) // adds firsname + lastname to bookings slice
+
+			/*
+				fmt.Printf("\n\nThe whole array: %v\n", bookings)
+				fmt.Printf("The first value: %v\n", bookings[0])
+				fmt.Printf("The Array type: %T\n", bookings)
+				fmt.Printf("Array length: %v\n", len(bookings))
+			*/
+
+			fmt.Println("\n\nThank you for purchasing", usertickets, "tickets!\nYou will revieve a confirmation email at: ", email, "\n----------------------------------------------------------------------------")
+			fmt.Println("\n\nGlobal announcement:")
+			fmt.Println(remainingTickets, "tickets remain.")
+
+			// for privacy we only want to print the first names of users
+			// when showing buyer list
+			firstNames := []string{}           // slice
+			for _, booking := range bookings { // gets len of booking
+				var names = strings.Fields(booking)
+				firstNames = append(firstNames, names[0])
+			}
+
+			// starts a new goroutine (calculation seperate from main thread)
+			go sendTicket(usertickets, firstname, lastname, email)
+			// bad example of goroutine, would normally be used in backround to send message
+			// to server without blocking program flow
+
+			fmt.Println("\nAll our bookings: ", firstNames)
+
+			if remainingTickets == 0 {
+				fmt.Println("Our", confname, "is fully booked out. Come back next month.")
+				break // ends program
+			}
+		} else {
+
+			// validate user input
+			if !isValidName { // if ![varname] means if varname is false
+				fmt.Println("\n\nFirst name or last name you entered is too short.\nHTTP://ERROR - 234[Q]")
+			}
+			if !isValidEmail {
+				fmt.Println("\n\nEmail you provided is invaid - Minimum character limit: 2, Must include @ sign.\nPARSE:ERROR [01]")
+			}
+			if !isValidTickets {
+				fmt.Println("\n\nNumber of tickets entered is invalid.\nHTTP://ERROR - 403[Q]")
+			}
+
+			// fmt.Printf("\n\nOur servers cannot compute your input data. Please try again.\nHTTP://ERROR - 406[Q]")
+		}
+
+	}
+}
+
+// encapsulate greet logic in a function to clear up some code
+func greetuser(confname string, conftickets int, remticks uint) {
+	fmt.Printf("\n\n\n\nWelcome to our %v booking application.\n", confname)
+	fmt.Printf("We have a total of %v tickets and currently, %v  are still available.\n", conftickets, remticks)
+	fmt.Println("Get your tickets while supplies last!")
+}
+
+func sendTicket(usertickets uint, firstname string, lastname string, email string) {
+	time.Sleep(5 * time.Second)
+	var ticket = fmt.Sprintf("%v tickets for %v %v", usertickets, firstname, lastname) // Sprintf allows for print statements to be stored in a variable
+	fmt.Println("\n\n###################")
+	fmt.Printf("Sending ticket:\n {%v} to email address %v\n", ticket, email)
+	fmt.Println("##################")
+	fmt.Println()
+}

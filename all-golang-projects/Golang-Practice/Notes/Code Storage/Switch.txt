@@ -1,0 +1,30 @@
+package main
+
+import "fmt"
+
+
+func calc(x, y int) int {
+	return x + y
+}
+
+func main(){
+
+	var switch_case01 = 4
+	
+	
+	switch switch_case01{
+	case(1):
+		fmt.Println("This is not true")
+	case(2):
+		fmt.Println("This is not true")	
+	case(3):
+		fmt.Println("True!")
+	case(4):
+		fmt.Println("This is not true")	
+	default:
+		fmt.Println("No value has been provided by the developer")
+	}
+
+
+	fmt.Println(calc(22386, 996))
+}

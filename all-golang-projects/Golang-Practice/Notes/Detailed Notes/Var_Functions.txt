@@ -1,0 +1,39 @@
+You can assign the return value of functions to a variable.
+For example:
+-----------------------------------------------------------------
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	var num1, num2 int = 2, 4
+
+	sum := printfn(num1, num2)
+	fmt.Println(sum)
+}
+
+func printfn(x, y int) int{
+	return x + y
+}
+-----------------------------------------------------------------
+
+The sum variable is set to the value of 2 + 4. Sum is now 6.
+
+
+You can create aliases for any function.
+If you have a function that greets the user, say hello, create an alias for it like this:
+
+var hl = hello // do not use ()
+
+func main(){
+	hl() // "Hello there!"
+}
+
+func hello(){
+	fmt.Println("Hello there!")
+}
+
+
+Any function you create can have an alias, as previously stated.

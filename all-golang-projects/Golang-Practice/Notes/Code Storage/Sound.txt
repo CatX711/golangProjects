@@ -1,0 +1,54 @@
+Here's a program i used to get sound in go:
+
+package main
+
+import (
+	"fmt"
+	"os/exec"
+	"runtime"
+	"time"
+)
+
+var musicCmd *exec.Cmd
+
+func main() {
+    soundFile := "put/your/file/path/here"
+
+    playMusic(soundFile)
+    stopMusic()
+}
+
+func playMusic(soundFile string) {
+	var cmd *exec.Cmd
+
+	switch runtime.GOOS {
+	case "windows":
+		cmd = exec.Command("cmd", "/c", "start", soundFile)
+	case "darwin":
+		cmd = exec.Command("afplay", soundFile)
+	default:
+		fmt.Println("Unsupported OS for playing music")
+		return
+	}
+
+	err := cmd.Start()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	musicCmd = cmd // Store the music command for stopping later
+}
+
+func stopMusic() {
+	switch runtime.GOOS {
+	case "windows":
+		exec.Command("taskkill", "/f", "/im", "afplay.exe").Run() // Replace with appropriate Windows command
+	case "darwin":
+		exec.Command("pkill", "afplay").Run()
+	default:
+		fmt.Println("Unsupported OS for stopping music")
+	}
+	fmt.Println("Music stopped.")
+}
+

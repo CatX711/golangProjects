@@ -1,0 +1,44 @@
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+func main() {
+	name := "Daniel Catarig"
+	var firstname = strings.Fields(name)
+
+	fmt.Println("Test")
+	fmt.Println(firstname)
+}
+
+
+// strings.fields splits the string of array or slice with white space as seperator, and returns slice with the split elements.
+// e.g String: "Daniel Catarig" Slice: ["Daniel", "Catarig"]
+// we create a variable called names and give it the two new elements, the first name and last name
+// then because firstNames is a slice we append the first element of the names array to firsNames, ensuring that
+
+
+Another e.g
+
+var firstname string = "Jeff"
+var lastname string = "Blaine"
+
+var bookings []string
+bookings = append(bookings, firstname+" "+lastname)
+
+// for privacy we only want to print the first names of users
+// when showing buyer list
+firstNames := []string{} // slice
+for _, booking := range bookings{ // gets len of booking
+	var names = strings.Fields(booking) 
+	firstNames = append(firstNames, names[0])	
+}	
+
+// strings.fields splits the string of array or slice with white space as seperator, and returns slice with the split elements.
+// e.g String: "Daniel Catarig" Slice: ["Daniel", "Catarig"]
+// we create a variable called names and give it the two new elements, the first name and last name
+// then because firstNames is a slice we append the first element of the names array to firsNames, ensuring that
+// firstNames only includes the first name a user inputs
+// e.g names = "dumitru", "catarig" and we give firstNames names[0] which is "dumitru"

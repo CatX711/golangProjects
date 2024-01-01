@@ -1,0 +1,20 @@
+You can create aliases for functions by setting a variable to a functions name
+(not return value)
+
+E.g
+
+// pl() is now an alias for println
+var pl = fmt.Println 
+
+You can use pl() in your code as you  would with fmt.Println()
+Aliases are possible with any function.
+
+When importing you can also make an alias for the package inside it.
+E.g
+
+import blabla "go-myproject/mypackage"
+
+
+Then to use something inside you would write 
+
+blabla.FuncName()

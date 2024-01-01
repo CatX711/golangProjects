@@ -1,0 +1,25 @@
+package main
+
+import (
+    "fmt"
+)
+
+// Defining the struct
+type Person struct {
+    Name    string
+    Age     int
+    Address string
+}
+
+func main() {
+    // Creating a zero-valued struct
+    var someone Person
+    fmt.Println("Zero-valued struct:", someone) // prints - Zero-valued struct: { 0 }
+
+    // Assigning values to the fields later
+    someone.Name = "Alice"
+    someone.Age = 30
+    someone.Address = "123 Main St"
+
+    fmt.Println("Assigned values:", someone) // prints - Assigned values: {Alice 30 123 Main St}
+}

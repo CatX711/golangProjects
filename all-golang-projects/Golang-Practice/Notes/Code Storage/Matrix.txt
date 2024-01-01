@@ -1,0 +1,38 @@
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+func main() {
+	rows := 30 // Number of rows
+	cols := 80 // Number of columns
+
+	matrix := make([][]rune, rows)
+	for i := range matrix {
+		matrix[i] = make([]rune, cols)
+	}
+
+	rand.Seed(time.Now().UnixNano())
+
+	for {
+		for i := 0; i < rows; i++ {
+			for j := 0; j < cols; j++ {
+				if rand.Float64() > 0.95 {
+					matrix[i][j] = '1'
+				} else {
+					matrix[i][j] = ' '
+				}
+			}
+		}
+
+		for i := 0; i < rows; i++ {
+			fmt.Println(string(matrix[i]))
+		}
+
+		time.Sleep(90 * time.Millisecond)
+		fmt.Print("\033[H\033[2J") // Clear screen
+	}
+}

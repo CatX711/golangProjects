@@ -1,0 +1,19 @@
+package main 
+
+import "fmt"
+
+
+func calc(x int, y float64) float64 { // var1, var2, return type
+	return float64(x) + y
+}
+
+func main() {
+	var number int = 26
+	var number2 float64 = 66.926
+
+	result := calc(number, number2) // result is auto type inferred to the value of calc with two variables as parameters
+	fmt.Println(result) // outputs result
+
+    // output:
+    // 92.926
+}

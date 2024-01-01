@@ -1,0 +1,14 @@
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	
+	hashmap := make(map[string]string)
+	
+	hashmap["p90x"] = "a"
+	
+	fmt.Println(hashmap["p90x"]) 
+}

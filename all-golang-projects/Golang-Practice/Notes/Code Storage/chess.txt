@@ -1,0 +1,92 @@
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+type Piece struct {
+	Kind  string
+	Color string
+}
+
+type Chessboard [8][8]Piece
+
+func NewGame() Chessboard {
+	// Set up the initial chessboard
+	board := Chessboard{
+		{
+			{"R", "W"}, {"N", "W"}, {"B", "W"}, {"Q", "W"}, {"K", "W"}, {"B", "W"}, {"N", "W"}, {"R", "W"},
+		},
+		{
+			{"P", "W"}, {"P", "W"}, {"P", "W"}, {"P", "W"}, {"P", "W"}, {"P", "W"}, {"P", "W"}, {"P", "W"},
+		},
+		{
+			{"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""},
+		},
+		{
+			{"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""},
+		},
+		{
+			{"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""},
+		},
+		{
+			{"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""}, {"", ""},
+		},
+		{
+			{"p", "B"}, {"p", "B"}, {"p", "B"}, {"p", "B"}, {"p", "B"}, {"p", "B"}, {"p", "B"}, {"p", "B"},
+		},
+		{
+			{"r", "B"}, {"n", "B"}, {"b", "B"}, {"q", "B"}, {"k", "B"}, {"b", "B"}, {"n", "B"}, {"r", "B"},
+		},
+	}
+	return board
+}
+
+func display(board Chessboard) {
+	fmt.Println("   a b c d e f g h")
+	for i := 0; i < 8; i++ {
+		fmt.Printf("%d ", i+1)
+		for j := 0; j < 8; j++ {
+			if board[i][j].Kind == "" {
+				fmt.Printf(". ")
+			} else {
+				fmt.Printf("%s ", board[i][j].Kind)
+			}
+		}
+		fmt.Printf("%d\n", i+1)
+	}
+	fmt.Println("   a b c d e f g h")
+}
+
+func makeMove(board *Chessboard, move string) {
+	// Simulate a simple move (e.g., "a2a4" means move piece from a2 to a4)
+	fromCol := int(move[0] - 'a')
+	fromRow := int(move[1] - '1')
+	toCol := int(move[2] - 'a')
+	toRow := int(move[3] - '1')
+
+	piece := (*board)[fromRow][fromCol]
+	(*board)[toRow][toCol] = piece
+	(*board)[fromRow][fromCol] = Piece{}
+}
+
+func main() {
+	board := NewGame()
+
+	fmt.Println("Welcome to Text-Based Chess in Go!")
+	display(board)
+
+	for {
+		var move string
+		fmt.Print("Enter your move (e.g., 'a2a4'): ")
+		fmt.Scan(&move)
+
+		if strings.ToLower(move) == "quit" {
+			break
+		}
+
+		makeMove(&board, move)
+		display(board)
+	}
+}

@@ -1,0 +1,22 @@
+If you create a variable but havent used it yet,
+and you dont want it to throw errors that you have not used it,
+assign it to _. If you know how to use _ in functions, you will be farmiliar
+with it.
+
+func main(){
+    var hello string = "Hey"
+
+    fmt.Println("Nothing")
+}
+
+// Error for not using hello
+
+
+func main(){
+    var hello string = "Hey"
+
+    _ = hello 
+    fmt.Println("Nothing")
+}
+
+// No error

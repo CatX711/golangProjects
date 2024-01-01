@@ -1,0 +1,40 @@
+package tokengenerator
+
+import (
+    "math/rand"
+    "time"
+)
+
+// Define a list of strings from which the token will be generated
+var tokenStrings = []string{
+    "s8s87asy876hdiuaysd98a56378576274843dsadaxa09adsawd_",
+    // Add more strings here as needed
+}
+
+// Function to generate a random token
+func GenerateToken() string {
+    // Seed the random number generator
+    rand.Seed(time.Now().UnixNano())
+
+    // Pick a random string from the list
+    randomIndex := rand.Intn(len(tokenStrings))
+    return tokenStrings[randomIndex]
+}
+
+
+Utilize:
+
+package main
+
+import (
+    "fmt"
+    "yourPackageName/tokengenerator" // Replace 'yourPackageName' with the actual package name
+)
+
+func main() {
+    // Generate a random token
+    token := tokengenerator.GenerateToken()
+
+    // Print the generated token
+    fmt.Println("Generated token:", token)
+}

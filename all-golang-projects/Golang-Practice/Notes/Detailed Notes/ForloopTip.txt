@@ -1,0 +1,57 @@
+Normal way to iterate over array:
+---------------------------------------------
+package main
+
+import "fmt"
+
+func showPeople(myarray []string){
+
+	// iterates over array elements and outputs them
+	for _, user := range myarray{
+		fmt.Println(user)
+	}
+}
+
+func main() {
+	showPeople([]string{"Bob", "Alice", "Mark"})
+}
+
+// output:
+// Bob
+// Alice
+// Mark
+
+/*
+Can also be written:
+
+func main() {
+	arr1 := []string{"Mason", "Jeremiah", "Jean", "Milo"}
+
+	showPeople(arr1)
+}
+*/
+
+---------------------------------------------
+Cooler way:
+
+---------------------------------------------
+package main
+
+import "fmt"
+
+func showPeople(myarray ...string){
+
+	// iterates over array elements and outputs them
+	for _, user := range myarray{
+		fmt.Println(user)
+	}
+}
+
+func main() {
+	showPeople("Bob", "Alice", "Mark")
+}
+
+// output:
+// Bob
+// Alice
+// Mark

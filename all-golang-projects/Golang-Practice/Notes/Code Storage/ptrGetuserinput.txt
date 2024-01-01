@@ -1,0 +1,20 @@
+This code uses a function with a pointer parameter to get
+userinput.
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	var userInput string
+	getUserInput(&userInput)
+
+	fmt.Println("\n\n", userInput)
+}
+
+func getUserInput(uinput *string) {
+	fmt.Print("Enter something: ")
+    fmt.Scan(uinput)
+}

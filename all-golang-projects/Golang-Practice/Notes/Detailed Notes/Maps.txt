@@ -1,0 +1,168 @@
+
+Maps in Golang
+
+Maps are one of the most useful data structures. It can store in key-value pairs and doesn’t allow for duplicate keys. Now, we will learn how the Go programming language implements maps.
+What is a map?
+A map is a key-value pair storage container. It offers fast and efficient lookups. And it doesn’t allow duplicate keys while it can have duplicate values.
+Declaration of a Map in Go
+
+How to declare a map in go:
+	
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func main() {
+    var names map[int]string    // name map has int keys and string values
+}
+
+In the above example, the key is of type int while the values are of string type.
+Initializing a Map
+
+Let’s see how we can initialize a map with values.
+1. Using make() function
+
+The function make(), can be used to initialize a map as shown below.
+	
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func main() {
+    var names = make(map[int]string)
+    names[0] = "John"
+    names[1] = "Jane"
+ 
+    fmt.Println(names)  // map[0:John 1:Jane]
+}
+2. Using literal syntax
+
+Maps can be initialized using map literal syntax. Below is an example illustrating that. Let’s take the same code before and modify that to initialize with map literal.
+
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func main() {
+    var names = map[int]string {
+        0: "John",
+        1: "Jane",   // last comma is a must
+    }
+     
+     
+    fmt.Println(names)  // prints map[0:John 1:Jane]
+}
+Working with maps in Golang
+
+We can insert, delete, retrieve keys in a map. Let’s see how to do that.
+1. Inserting elements in a map
+
+You can insert keys in two ways. Either insert keys when initializing or use index syntax to initialize.
+	
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func main() {
+    var names = make(map[int]string)
+     
+    names[0] = "Freddy"    // indexed insertion
+    names[1] = "Shawn"
+     
+    fmt.Println(names)  // prints map[0:Freddy 1:Shawn]
+}
+2. Getting values from a map
+
+We can get values associated with keys from a map using index notation as shown below.
+	
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func main() {
+    var names = make(map[int]string)
+     
+    names[0] = "Freddy"    // indexed insertion
+    names[1] = "Shawn"
+     
+    fmt.Println(names[1])  // prints Shawn
+}
+3. Check if a key exists
+
+We get a boolean when we try retrieving a value. That helps to check if a key exists.
+	
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func main() {
+    var names = make(map[int]string)
+     
+    names[0] = "Freddy"    // indexed insertion
+    names[1] = "Shawn"
+     
+    fred, exists := names[0]
+    if(exists) {
+        fmt.Printf("%s exists", fred)  // prints "Freddy exists"
+    }   
+}
+4. Delete key from a map
+
+We use the delete function to remove a key from a map. Let’s see an example of how it is done.
+
+	
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func main() {
+    var names = make(map[int]string)
+     
+    names[0] = "Freddy"    // indexed insertion
+    names[1] = "Shawn"
+    names[2] = "Batman"
+     
+    // delete shawn
+    delete(names, 1) 
+    fmt.Println(names)     // prints map[0:Freddy 2:Batman]
+}
+5. Iterating over a map entries
+
+Using range we can iterate over a map and get keys and values both.
+
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func main() {
+    var names = make(map[int]string)
+     
+    names[0] = "Freddy"    // indexed insertion
+    names[1] = "Shawn"
+    names[2] = "Batman"
+    names[3] = "Spiderman"
+    names[4] = "Joker"
+     
+    for _, name := range names {
+        fmt.Println(name)
+    }
+     
+}
+
+This is how we can add or remove items, retrieve keys and values from a map. It is one of the most useful data structures.

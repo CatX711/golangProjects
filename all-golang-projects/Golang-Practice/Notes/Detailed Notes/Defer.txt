@@ -1,0 +1,31 @@
+Defer is used to make something execute after something else,
+despite it's position in code.
+For example:
+
+--------------------------------------------------------------------
+func main(){
+    fmt.Println("Hello")
+    fmt.Println("World")
+
+}
+
+// Hello World
+--------------------------------------------------------------------
+With Defer:
+--------------------------------------------------------------------
+func main(){
+    defer fmt.Println("Hello")
+    fmt.Println("World")
+}
+
+// World Hello
+--------------------------------------------------------------------
+"Hello" prints when the main function exits.
+Even if you had 20 more fmt.Println's, Hello would print last.
+
+If there was a defer in a different function, say "blabla()",
+whatever was deferred would only run after blabla finished executing.
+So if you wanted to tell another function to do something but you're
+not able to estimate when blabla() will finish, use defer so you can send 
+instructions directly after it's finished.
+

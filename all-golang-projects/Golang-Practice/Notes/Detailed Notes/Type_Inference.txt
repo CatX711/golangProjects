@@ -1,0 +1,26 @@
+You can naturally define variable types like this:
+--------------------------------
+var greeting string = "Hello"
+^    ^name     ^type    ^value
+keyword
+--------------------------------
+
+However there exists another way to do this, and it's automated by the compiler.
+Type inference is a feature in Golang that allows types to be automatically inferred by the compiler,
+via the use of `:=`
+
+For example:
+-----------------------
+greeting := "Hello"
+-----------------------
+
+The compiler will give the greeting variable the type of string without you having to specify it.
+
+Here are some more examples:
+------------------------------------------------
+decimalNumber := 3.027
+trueOrFalse := true
+codiac := 5
+superMarioLevel := 23
+NAME := "Daniel Catarig"
+USERNAME :=  "d1.fundz"

@@ -1,0 +1,29 @@
+package main
+
+import "fmt"
+import "time"
+
+
+func main(){
+
+
+	evilNinjas := [...]string{"Tommy", "Johnny", "Bobby", "Andy"}
+	
+	// feeds each element of ninja array into attack function
+	for _, ninja := range evilNinjas{
+		attack(ninja)
+	}
+}
+
+
+func attack(target string){
+	fmt.Println("Throwing ninja stars at: ", target)
+	time.Sleep(time.Second)
+}
+
+
+// output:
+// Throwing ninja stars at:  Tommy
+// Throwing ninja stars at:  Johnny
+// Throwing ninja stars at:  Bobby
+// Throwing ninja stars at:  Andy 

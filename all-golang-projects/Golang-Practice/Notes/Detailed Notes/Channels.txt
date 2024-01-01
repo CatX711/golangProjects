@@ -1,0 +1,244 @@
+To create a channel, you use the built-in make() function and specify the type of the channel:
+Channels are created like this:
+var channel chan int = make(chan int)
+
+Channels are commonly created with the type inference operator:
+------------------------------------------------------------------------------------------------------------
+userch := make(chan int)
+------------------------------------------------------------------------------------------------------------
+This creates an unbuffered channel of type int. 
+An unbuffered channel is one that can only hold one value at a time,
+and sends and receives on an unbuffered channel will block until the corresponding operation is ready to proceed.
+
+For example, if you have a full box of cookies and try to add one more, the top will not close. So? You have to eat one!
+
+Once you have a channel, you can send and receive values on it using the <- operator. 
+For example, to send a value on a channel, you would use:
+------------------------------------------------------------------------------------------------------------
+userch <- 42
+------------------------------------------------------------------------------------------------------------
+This sends the value 42 to the channel userch.
+If you just print a channel, it wont output it's value, and instead it's memory address (i think).
+To print a channel's value, you need to give assign it to a variable.
+
+To receive a value from a channel, you would do:
+------------------------------------------------------------------------------------------------------------
+x := <-userch
+------------------------------------------------------------------------------------------------------------
+This receives a value from the channel userch and assigns it to the variable x.
+If there is no value currently available on the channel, the receive operation will block until a value is sent on the channel.
+
+You cannot print x however, because go hates you. Just kidding, it's because you need to ensure that when sending a message into a channel, 
+there's a goroutine ready to receive from it. 
+Consider using a separate goroutine to handle the reading from the channel to prevent this error.
+
+------------------------------------------------------------------------------------------------------------
+package main
+
+import "fmt"
+
+func main() {
+	msgch := make(chan string)
+
+	go sendMessage(msgch) // Run sending operation in a separate goroutine
+	readMessage(msgch)
+}
+
+func sendMessage(msgch chan<- string) {
+	msgch <- "Hello!"
+}
+
+func readMessage(msgch <-chan string) {
+	msg := <-msgch
+	fmt.Println(msg)
+}
+------------------------------------------------------------------------------------------------------------
+If you're too lasy to create a goroutine or dont want to store two values in a channel, create a buffered channel by 
+stating that your channel stored 1 value. Unbuffered channels also store one value but for some reason without the maximum 
+storage amount specified it needs it's own goroutine. 
+
+// Works
+
+func main(){
+	channel := make(chan int, 1)
+	
+	
+	channel <- 42
+	msg := <-channel
+	fmt.Println(msg)
+}
+
+// Does not work
+
+func main(){
+	channel := make(chan int)
+	
+	
+	channel <- 42
+	msg := <-channel
+    fmt.Println(msg)
+}	
+
+
+Also, sendMessage is the same as writing:
+------------------------------------------------------------------------------------------------------------
+go func(){
+	msgch <- "Hello!"
+}()
+------------------------------------------------------------------------------------------------------------
+
+The function `go func(){}()` is explained in Goroutines.txt
+
+
+This is not really needed if you specify that your channel is buferred, e.g:
+------------------------------------------------------------------------------------------------------------
+ch := make(chan int, 5) // buffer of 5, will only start blocking at 5 values
+------------------------------------------------------------------------------------------------------------
+This creates a buffered channel of type int with a buffer size of 5.
+You can send and receive values on a buffered channel as you would with an unbuffered channel, 
+but sending a value will only block if the buffer is full, and receiving a value will only block if the buffer is empty.
+
+
+Blocking example:
+
+Normally goroutines allow the program to move forward. Calculations are done
+in a seperate thread to the main one. What if your program was dependant on a channel that
+wasnt ready yet, but was in a goroutine? Well, the program will block. 
+------------------------------------------------------------------------------------------------------------
+channel := make(chan string)
+
+go func(){
+
+    time.Sleep(2 * time.Second)
+    channel <- "Bob" // give channel "Bob"
+}()
+
+user := <-channel // give user value of channel
+
+fmt.Println(user)
+------------------------------------------------------------------------------------------------------------
+
+The whole program will cease to continue while the goroutine calculates.
+
+
+
+Channels with functions:
+
+Only send functions
+
+If we have a function that just sends a value to a channel,
+we can specify if it's a channel we can only send things to inside the parameters.
+
+------------------------------------------------------------------------------------------------------------
+func sendMessage(msgch chan<- string){
+    msgch <- "Hello!"
+}
+------------------------------------------------------------------------------------------------------------
+We use `chan<- value` for this.
+The fact that it's send only means we cannot read it.
+So storing it's value in a variable would not be viable
+------------------------------------------------------------------------------------------------------------
+func sendMessage(msgch chan<- string){
+    msgch <- "Hello!"
+    msg := <-msgch
+
+    fmt.Println(msg) 
+    // cannot receive from send-only channel msgch (variable of type chan<- string)
+}
+------------------------------------------------------------------------------------------------------------
+
+Only read functions
+
+This is the opposite of send only functions, with this function you can only
+read another channel.
+
+func readMessage(msgch <-chan string){
+    msg := <-msgch
+    fmt.Println(msg)
+}
+------------------------------------------------------------------------------------------------------------
+
+
+
+
+Channels with structs:
+
+------------------------------------------------------------------------------------------------------------
+package main
+
+import "fmt"
+
+type Message struct {
+	MsgChannel chan string
+}
+
+func NewMessage() Message {
+	return Message{
+		MsgChannel: make(chan string),
+	}
+}
+
+func main() {
+	message := NewMessage()
+
+	go func() {
+		message.MsgChannel <- "Hello from the channel!"
+	}()
+
+	receivedMsg := <-message.MsgChannel
+	fmt.Println(receivedMsg)
+}
+------------------------------------------------------------------------------------------------------------
+
+Channel examples:
+
+package main
+
+import "fmt"
+
+
+func storeval(val chan int, someValue int){
+	val <- someValue * 5
+}
+
+func main(){
+	numChannel := make(chan int)
+	go storeval(numChannel, 5) // 25
+	go storeval(numChannel, 12) // 60
+	
+	version1, version2 := <-numChannel, <-numChannel
+	fmt.Println(version1, version2)
+}
+
+In this code we create a function called storeval that takes in a channel and a value,
+then we create a variable called numChannel, and feed it into storeval where it gets passed 
+the result of the provided value times 5. 
+We create two versions of numChannel, and set two variables two the two versions.
+
+package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    ch := make(chan int)
+
+    // Write to the channel
+    go func() {
+        ch <- 42
+    }()
+
+    // Read from the channel
+    value := <-ch
+    fmt.Println(value)
+
+    // Write to the channel again
+    go func() {
+        ch <- 99
+    }()
+
+    // Read from the channel again
+    value = <-ch
+    fmt.Println(value)
+}

@@ -1,0 +1,17 @@
+package main
+
+import "fmt"
+
+func predictNextNumber(sequence []int) int {
+	length := len(sequence)
+	nextNumber := sequence[length-1] + (sequence[1] - sequence[0]) // Predicts next number in an arithmetic sequence
+	return nextNumber
+}
+
+func main() {
+	sequence := []int{1, 3, 5, 7, 9} // Example sequence
+
+	nextNumber := predictNextNumber(sequence)
+
+	fmt.Printf("The next number in the sequence is: %d\n", nextNumber)
+}

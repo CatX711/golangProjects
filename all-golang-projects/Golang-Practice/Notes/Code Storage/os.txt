@@ -1,0 +1,184 @@
+/*package main
+
+import "fmt"
+
+func main() {
+	for {
+		var command string
+
+		fmt.Printf("λ ")
+		fmt.Scan(&command)
+
+		if command == "cmd" {
+			fmt.Println("\nCommands:")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("cmd - list of commands")
+			fmt.Println("ls - show items in current directory\n")
+		}
+	}
+}
+*/
+
+/*
+package main
+
+import (
+	"fmt"
+)
+
+type File struct {
+	isDir bool
+	// Other file attributes can be added here
+}
+
+func main() {
+	fileSystem := make(map[string]File)
+	currentDirectory := "/"
+
+	fileSystem[currentDirectory] = File{isDir: true} // Root directory
+
+	for {
+		var command string
+
+		fmt.Printf("λ ")
+		fmt.Scan(&command)
+
+		switch command {
+		case "cmd":
+			fmt.Println("\nCommands:")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("cmd - list of commands")
+			fmt.Println("ls - show items in current directory")
+			fmt.Println("mkdir <directory_name> - create a new directory")
+			fmt.Println("cd <directory_name> - enter a directory")
+			fmt.Println("exit - exit the program\n")
+		case "ls":
+			fmt.Println("Contents of", currentDirectory)
+			for name := range fileSystem {
+				fmt.Println(name)
+			}
+			fmt.Println()
+		case "mkdir":
+			var dirName string
+			fmt.Print("Enter directory name: ")
+			fmt.Scan(&dirName)
+
+			if _, exists := fileSystem[currentDirectory+"/"+dirName]; exists {
+				fmt.Println("Directory already exists")
+			} else {
+				fileSystem[currentDirectory+"/"+dirName] = File{isDir: true}
+				fmt.Println("Directory", dirName, "created")
+			}
+		case "cd":
+			var dirName string
+			fmt.Print("Enter directory name: ")
+			fmt.Scan(&dirName)
+
+			if _, exists := fileSystem[currentDirectory+"/"+dirName]; exists {
+				currentDirectory = currentDirectory + "/" + dirName
+				fmt.Println("Changed directory to", currentDirectory)
+			} else {
+				fmt.Println("Directory does not exist")
+			}
+		case "exit":
+			fmt.Println("Exiting...")
+			return
+		default:
+			fmt.Println("Invalid command. Type 'cmd' to see available commands.")
+		}
+	}
+}
+*/
+
+package main
+
+import (
+	"fmt"
+)
+
+type File struct {
+	isDir bool
+	// Additional attributes can be added here for file details
+}
+
+func main() {
+	fileSystem := make(map[string]File)
+	currentDirectory := "/"
+
+	fileSystem[currentDirectory] = File{isDir: true} // Root directory
+
+	for {
+		var command string
+
+		fmt.Printf("λ ")
+		fmt.Scan(&command)
+
+		switch command {
+		case "cmd":
+			fmt.Println("\nCommands:")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("--")
+			fmt.Println("cmd - list of commands")
+			fmt.Println("ls - show items in current directory")
+			fmt.Println("mkdir <directory_name> - create a new directory")
+			fmt.Println("cd <directory_name> - change directory")
+			fmt.Println("create <file_name> - create a new file in current directory")
+			fmt.Println("exit - exit the program\n")
+		case "ls":
+			fmt.Println("Contents of", currentDirectory)
+			for name := range fileSystem {
+				fmt.Println(name)
+			}
+			fmt.Println()
+		case "mkdir":
+			var dirName string
+			fmt.Print("Enter directory name: ")
+			fmt.Scan(&dirName)
+
+			if _, exists := fileSystem[currentDirectory+"/"+dirName]; exists {
+				fmt.Println("Directory already exists")
+			} else {
+				fileSystem[currentDirectory+"/"+dirName] = File{isDir: true}
+				fmt.Println("Directory", dirName, "created")
+			}
+		case "create":
+			var fileName string
+			fmt.Print("Enter file name: ")
+			fmt.Scan(&fileName)
+
+			if _, exists := fileSystem[currentDirectory+"/"+fileName]; exists {
+				fmt.Println("File already exists")
+			} else {
+				fileSystem[currentDirectory+"/"+fileName] = File{isDir: false}
+				fmt.Println("File", fileName, "created")
+			}
+		case "cd":
+			var dirName string
+			fmt.Print("Enter directory name: ")
+			fmt.Scan(&dirName)
+
+			if _, exists := fileSystem[currentDirectory+"/"+dirName]; exists {
+				currentDirectory = currentDirectory + "/" + dirName
+				fmt.Println("Changed directory to", currentDirectory)
+			} else {
+				fmt.Println("Directory does not exist")
+			}
+		case "exit":
+			fmt.Println("Exiting...")
+			return
+		default:
+			fmt.Println("Invalid command. Type 'cmd' to see available commands.")
+		}
+	}
+}

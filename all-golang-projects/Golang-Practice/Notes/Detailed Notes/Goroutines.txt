@@ -1,0 +1,79 @@
+A go program is split into threads.
+There's the main thread, and seperated threads.
+If you want to run calculations that would otherwise halt the program's
+flow, use goroutines, which creates a seperate thread that can do something
+before ending.
+This is useful for calculating large amounts of data without disrupting the rest of the 
+program.
+You can create goroutines with functions and variables.
+
+Functions:
+
+create your function:
+
+func hello(){
+    fmt.Println("Hello")
+}
+
+put it in your main function
+
+func main(){
+    hello()
+}
+
+add the go keyword
+
+func main(){
+    go hello()
+}
+
+done!
+
+If hello were to actually do something important that would require some time,
+the program would continue as normal while the seperate thread is where all the
+work is being done.
+Eventually when the seperate thread was no longer needed the output would be put in the
+main thread and the seperate thread closed.
+
+Variables:
+
+forget about those they're way too hard lol
+----------------------------------------------------------------------------------------------
+
+If you dont already have a function but want to make a function goroutine,
+use go func(){}()
+
+Yes, I know it's a bit of a weird looking syntax, but it's pretty simple.
+go func(){}() can be used as many times as possible, and its used to create
+a quick segment of code on a seperate thread, without having to have it's own
+name and parameters. If you actually need paramaters and your function has a greater
+purpose than usual, I would advise against using go func(){}(), just create a function
+and make a goroutine the conventional way.
+
+Here's how you make a standalone goroutine using go func(){}():
+----------------------------------------------------------------------------------------------
+
+package main
+
+import "fmt"
+import "time"
+
+func main(){
+
+	go func(){
+		
+		fmt.Println("Ello!")
+	}()
+	
+	time.Sleep(3 * time.Second)
+}
+----------------------------------------------------------------------------------------------
+Why do you need to wait a few seconds? Well, goroutines, despite being nearly instantanious,
+still need time to calculate. Since the main thread carries on despite the seperate thread, as it's 
+supposed to, there being nothing inside the main thread means the main thread ends instantly.
+When the main thread ends, all things are halted - every seperate thread, calculation, etcetera.
+That's why we wait, to give the main thread something to work with and the goroutine some time to calculate.
+This applies to all goroutines.
+
+When working with go func(){}() in larger calculations however, you usually wont need 
+to sleep for any amount of time as the main thread will be fine moving on.

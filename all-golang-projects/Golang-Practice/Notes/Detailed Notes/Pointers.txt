@@ -1,0 +1,350 @@
+😬
+
+
+See: https://www.digitalocean.com/community/conceptual-articles/understanding-pointers-in-go
+     https://www.youtube.com/watch?v=a4HcEsJ1hIE&list=PLzMcBGfZo4-mtY_SE3HuzQJzuj4VlUG0q&index=19
+
+
+Pointers are a very important concept in Go and programming as a whole.
+There's two pointer related operators in Go:
+    & - Get pointer
+    * - Dereference
+
+A pointer is a memory address, for example 0xc0000012a43   
+
+& behind variable = get memory address (pointer)
+* to left of a datatype means a pointer to a datatpe of type string
+* before variable means get take pointer and figure out value
+
+
+Easy example:
+
+func main(){
+    variable := "Hello"
+    
+    var pointer *string = &variable // &variable means we give pointer something to point to
+    var pointer = &variable // also works
+}
+
+When you declare a pointer variable, you follow the variable name with the type of the variable that the pointer points to, 
+prefixed with an *, like this.
+This creates the variable pointer as a pointer to a string variable, 
+and initializes the pointer with the memory address of someint. 
+The pointer doesn’t actually contain a string, just the address of a variable containing one.
+If you print pointer without an * it will just print the memory address,
+but if you include it, it will print the value of what it's pointing to.
+
+func main(){
+    variable := "Hello"
+    var pointer *string = &variable 
+
+    fmt.Println(*pointer) // "Hello"
+    fmt.Println(pointer) // 0xc000014070
+}
+
+
+Pointers are memory adresses. We can store memory adresses in variables
+which we can use. Variables that are pointers, since they are variables, 
+also have memory adresses.
+
+func main(){
+    variable := "Hello"
+    var pointer *string = &variable 
+
+    fmt.Println(pointer, &pointer) // 0xc000014070, 0xc000106018
+}
+
+If you want to modify the value stored at the pointer variable’s location, 
+you can use the dereference operator (*) as well:
+
+func main(){
+    variable := "Hello"
+    var pointer *string = &variable 
+
+    fmt.Println(*pointer)
+
+    *pointer = "Goodbye" // changes value
+
+    fmt.Println(*pointer) 
+
+
+    // Hello 
+    // Goodbye
+}
+
+We set the value the pointer variable refers to by using the asterisk (*) 
+in front of the variable name, and then providing a new value of "Goodbye".
+As you can see, when we print the dereferenced value, it is now set to the
+specified value.
+
+fmt.Println(*pointer) // Goodbye
+fmt.Println(variable) // Goodbye
+
+We actually changed the value of the "variable" as well. 
+This is because the pointer variable is actually pointing at "variable"’s
+address. 
+If we change the value pointed at from the pointer variable, 
+we also change the value of "variable".
+
+Using functions with pointers:
+
+When you write a function, you can define arguments to be passed ether by value, or by reference. 
+Passing by value means that a copy of that value is sent to the function, 
+and any changes to that argument within that function only effect that variable within that function, 
+and not where it was passed from. However, if you pass by reference, meaning you pass a pointer to that argument, 
+you can change the value from within the function, and also change the value of the original variable that was passed in.
+
+Deciding when to pass a pointer as opposed when to send a value is all about knowing 
+if you want the value to change or not. If you don’t want the value to change, 
+send it as a value. 
+If you want the function you are passing your variable to be able to change it, then you would pass it as a pointer.
+
+
+To see the difference, look at a function that is passing in an argument by value:
+
+
+package main
+
+import "fmt"
+
+type Creature struct {
+	Species string
+}
+
+func main() {
+	var creature Creature = Creature{Species: "shark"}
+
+	fmt.Printf("1: %v\n", creature)
+	changeCreature(creature)
+	fmt.Printf("3: %v\n", creature)
+}
+
+func changeCreature(creature Creature) {
+	creature.Species = "jellyfish"
+	fmt.Printf("2: %v\n", creature)
+}
+
+// 1: {shark}
+// 2: {jellyfish}
+// 3: {shark}
+
+First we created a custom type named Creature. 
+It has one field named Species, which is a string. 
+In the main function, we created an instance of our new type named creature and set the Species field to shark. 
+We then printed out the variable to show the current value stored within the creature variable.
+Next, we call changeCreature and pass in a copy of the creature variable.
+
+Notice that within the changeCreature function, the value of Species is now jellyfish, 
+and it prints out 
+
+2: {jellyfish}
+
+This is because we are allowed to change the value within our function scope.
+However, when the last line of the main function prints the value of creature, the value of Species is still shark. 
+The reason that the value didn’t change is because we passed the variable by value. 
+This means that a copy of the value was created in memory, and passed to the changeCreature function. 
+This allows us to have a function that can make changes to any arguments passed in as needed, 
+but will not affect any of those variables outside of the function.
+
+Let’s change the changeCreature function to take an argument by reference. 
+We can do this by changing the type from creature to a pointer by using the asterisk (*) operator. 
+Instead of passing a creature, we’re now passing a pointer to a creature, or a *creature. 
+In the previous example, creature is a struct that has a Species value of shark. 
+*creature is a pointer, not a struct, so its value is a memory location, and that’s what we pass to changeCreature().
+
+
+
+package main
+
+import "fmt"
+
+type Creature struct {
+	Species string
+}
+
+func main() {
+	var creature Creature = Creature{Species: "shark"}
+
+	fmt.Printf("1: %v\n", creature)
+	changeCreature(&creature)
+	fmt.Printf("3: %v\n", creature)
+}
+
+func changeCreature(creature *Creature) {
+	creature.Species = "jellyfish"
+	fmt.Printf("2: %v\n", creature)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+All of this stuff was when i didnt fully understand it but honestly
+just read it to try and understand cuz yeah
+
+
+func main(){
+    // 7 = value 
+    x := 7 // x = reference, where value is stored
+
+    // look at reference of variable
+    fmt.Println(&x) // show location of x in memory
+}
+
+Getting pointers and modifying values:
+
+
+func main(){
+
+    x := 7 
+    y := &x // y = pointer for x (reference)
+            // gibberish memory address thingy (0xc00009a000)
+
+    // 7 0xc00009a000 
+    fmt.Println(x, y) 
+
+    // change value of x
+    *y = 8 // take mem address (reference) and access where it's pointing to (x)
+           // and then change it's value
+
+    // 8, 0xc00009a000
+    fmt.Println(x, y)       
+}
+
+
+Using functions with pointers:
+
+
+                    // means "i want a pointer to a string not a string"
+func changeValue(variable *string){
+    // dereference pointer
+    *variable = "Changed!" // change value
+} 
+
+func main(){
+    pleaseChangeMe := "Hello!"
+
+
+    fmt.Println(pleaseChangeMe)
+    changeValue(&pleaseChangeMe) // gets pointer to pleasechangeme 
+    fmt.Println(pleaseChangeMe)
+
+    // output:
+    // Hello!
+    // Changed!
+}
+
+
+You need this because when using an immutable type that doesnt
+have the same special properties as arrays or slices you need a pointer
+or else it wont work.
+
+
+

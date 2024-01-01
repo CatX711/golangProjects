@@ -1,0 +1,40 @@
+// doesnt work
+
+
+
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+func main() {
+	// Simple pattern-response mapping
+	patterns := map[string]string{
+		"hi":     "Hello!",
+		"how are you": "I'm doing well, thank you!",
+		"bye":    "Goodbye!",
+	}
+
+	fmt.Println("AI: Hi! How can I help you today?")
+
+	for {
+		var userInput string
+		fmt.Print("You: ")
+		fmt.Scanln(&userInput)
+
+		userInput = strings.ToLower(userInput) // Convert user input to lowercase for easier comparison
+
+		response, exists := patterns[userInput]
+		if exists {
+			fmt.Println("AI:", response)
+		} else {
+			fmt.Println("AI: I'm not sure how to respond to that.")
+		}
+
+		if userInput == "bye" {
+			break
+		}
+	}
+}

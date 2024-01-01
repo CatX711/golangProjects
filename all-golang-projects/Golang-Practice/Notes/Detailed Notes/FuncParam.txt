@@ -1,0 +1,42 @@
+You can have functions as parameters in other functions.
+-------------------------------------------------------------------
+func myfunction(i int) int{
+    return i
+}
+
+myfunction takes in a variable and returns it.
+
+                                   //p  //rt  //rf type
+func returnfunction(i int, f func(int) int) int{
+    return f(i) // f takes in i
+}
+
+KEY: p = f's parameter 
+     rt = f's return type
+     rf type = returnmyfunction's return type 
+-------------------------------------------------------------------
+
+In this example, returnfunction will return the value of 
+another function. You can replace p with anything.
+Here's an example using the previous code with some minor changes:
+-------------------------------------------------------------------
+package main
+
+import "fmt"
+
+func main(){
+    fmt.Println(returnfunction("Hello", myfunction))
+
+}
+
+func myfunction(i string) string{
+    return i
+}
+
+                                   //p  //rt  //rf type
+func returnfunction(i string, f func(string) string) string{
+    return f(i) // f takes in i
+}
+
+// Outputs: Hello
+-------------------------------------------------------------------

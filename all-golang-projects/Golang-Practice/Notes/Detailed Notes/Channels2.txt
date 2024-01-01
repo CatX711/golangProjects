@@ -1,0 +1,184 @@
+See: https://www.youtube.com/watch?v=8uiZC0l4Ajw (47:13)
+
+
+Channels are supposed to be utilised with goroutines.
+They allow for data to be sent across goroutines
+Channels can be any type, int, string, even custom types!
+
+type ABC struct{
+    n int
+}
+
+func main(){
+    dataChannel := make(chan ABC)
+}
+
+
+You can do two things with a channel:
+Send data to it
+
+dataChan <- 789 // send int value 789 into our channel
+
+Recieve data from channel
+n := <- dataChannel // n is value in channel
+
+
+Simply printing a channel wouldnt work, as it would result in a deadlock.
+This is because by default a channel does not have any space inside of it,
+and you cannot temporarily store a value inside a channel.
+They're kind of like portals, if data enters it, it also has to exit simultaneously!
+
+
+The lines dataChannel <- 789 and n := dataChannel have to happen at the same time.
+How do we do this though?
+Through the use of goroutines we can allow for simultaneous data transfer.
+Don't question it, that's how it works.
+
+
+func main(){
+    dataChannel := make(chan int)
+
+    go func(){
+        dataChannel <- 789
+    }()
+
+    n := dataChannel
+
+    fmt.Printf("n = %v", n)
+} 
+
+This will work.
+
+
+Here's another explination: you know how go programs are structured 
+like threads, and goroutines are separate threads that close when finished?
+
+With portals, you have an entrance and an exit, if you just have an entrance,
+and no destination, the portal will block (in this case deadlock).
+
+You'll need one thread thats adding data to the channel, and at the same time,
+one that receives data. 
+
+This issue only arises with unbuffered channels, where you dont specify the 
+size of the channel at runtime.
+If you were to specify how many values a channel can hold, then this problem will
+dissipate!
+Buffered channels CAN store temporary data, unbuffered channels CANNOT.
+
+
+    dataChannel := make(chan int)
+
+    go func(){
+        dataChannel <- 789
+    }()
+
+    OR:
+
+    dataChannel := make(chan int 1) 
+
+    dataChannel <- 789
+
+
+Buffered channels cannot hold more data than specified.
+E.g:
+
+dataChannel := make(chan int 2)
+
+dataChannel <- 3128
+dataChannel <- 69
+dataChannel <- 232 // deadlock
+
+
+Buffered channels are kind of weird in how they use their provided data.
+Here's an example:
+
+dataChannel <- 717
+dataChannel <- 44
+
+n := <- dataChannel
+fmt.Printf("n = %v", n) // 717
+
+n := dataChannel
+fmt.Printf("n = %v", n) // 44
+
+
+
+
+
+But this isn't really how channels are supposed to be used.
+They are ment to be used in a multi-threaded environment, aka with goroutines as stated
+earlier. Here's an example of how they SHOULD be used.
+
+
+func main(){
+    dataChan := make(chan int) // unbuffered channel 0.0
+
+    go func(){
+
+        for i := 0; i < 1000; i++{
+            dataChan <- i // add each iteration of i to dataChan
+        }
+    }()
+
+    for n := range dataChan{ // iterate through data in channel
+        fmt.Println(n) // print values in channel
+    }
+}
+    
+Here we have a program that adds the value of i to datachan and
+then print that value. This program should print 1-1000 and it works because
+there's constant data transfer of new values being added to datachan and then the data being cleared
+by being used in the println. This doesnt work however, because it gets to 
+999 and deadlocks.
+At 999 the goroutine was done, there was nothing to do, so it stopped,
+meanwhile the main thread was still trying to recieve data from our goroutine, thus a deadlock occured.
+Fix this by closing the channel immediately after no more data is needed by using close(dataChan)
+
+Add defer to make sure it ends exactly when needed.
+
+Fixed program:
+
+func main(){
+    dataChan := make(chan int) // unbuffered channel 0.0
+
+    go func(){
+        defer close(dataChan)
+        for i := 0; i < 1000; i++{
+            dataChan <- i // add each iteration of i to dataChan
+        }
+        
+    }()
+
+    for n := range dataChan{ // iterate through data in channel
+        fmt.Println(n) // print values in channel
+    }
+}
+
+Now it gets to 999 without a deadlock. Neato!
+Here's a more cooler example:
+
+
+func DoWork() int{
+    return rand.Intn(100) // provide random number from 1-100
+}
+
+func main(){
+    dataChan := make(chan int)
+
+    time.Sleep(time.Second) // sleep for a second to make it look like we're doing hard work
+    go func(){
+        defer close(dataChan)
+        for i := 0; i < 1000; i++{
+            result := doWork()
+            dataChan <- result
+        }
+        
+    }()
+
+    for n := range dataChan{ 
+        fmt.Println(n)
+    }
+}
+
+
+Channels are pretty cool.

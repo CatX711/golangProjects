@@ -1,0 +1,131 @@
+Utilising for loops you can print through all the 
+elements in an array:
+
+package main
+
+import (
+	"fmt"
+)
+
+func main(){
+
+	var arr1 = []string{"blakablak", "bobo", "blan"}
+	
+	for i := range arr1{
+		fmt.Println(arr1[i])
+	}
+}
+
+// output:
+// blakablak
+// bobo
+// blan
+
+------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------
+package main
+
+import "fmt"
+
+var myarray = [...]int{1, 2, 4, 8, 16, 32, 64, 128} // inferred type
+
+func main() {
+	for index, value := range myarray {  
+		fmt.Printf("Index: %d, Value: %d\n", index, value)
+	}
+	
+}
+------------------------------------------------------------------------------
+
+When working with range (Range is like len() ) you need an i and v value.
+You can name `index` and `value` anything you want, even x and y. 
+The way you position them is what matters. 
+The first one will be the index of the array and the second the value of every element in the array.
+This loop outputs:
+
+------------------------------------------------------------------------------
+Index: 0, Value: 1 // index 0 in myarray has a value of 1
+Index: 1, Value: 2 
+Index: 2, Value: 4
+Index: 3, Value: 8
+Index: 4, Value: 16
+Index: 5, Value: 32
+Index: 6, Value: 64
+Index: 7, Value: 128 // index 7 has a value of 128
+------------------------------------------------------------------------------
+
+Remember, with arrays the index begins with 0, so element 3 would have an index of 2.
+---------------------------------
+myarray = [...]int{44, 36, 8937} 
+                  //0 //1  //2   
+---------------------------------
+
+
+When working with for loops that use range and other things, you must include an index and value.
+That is why, go supports a feature that lets you just use value, if thats what you want,
+via _ 
+
+Here's an example:
+
+----------------------------------------------------
+array1 = [5]int{123, 3, 4, 6, 7}
+
+func main() {
+	for _, value := range array1 {  
+		fmt.Printf("Value: %d\n", value)
+	}
+	
+}
+----------------------------------------------------
+
+This outputs:
+
+---------------
+Value: 123
+Value: 3
+Value: 4
+Value: 6
+Value: 7
+---------------
+
+
+You can also skip value with _
+
+----------------------------------------------------
+array1 = [5]int{123, 3, 4, 6, 7}
+
+func main() {
+	for index, _ := range array1 {  
+		fmt.Printf("Index: %d\n", index)
+	}
+	
+}
+----------------------------------------------------
+
+---------------
+Index: 0
+Index: 1
+Index: 2
+Index: 3
+Index: 4
+---------------
+
+You can also use _ with multiple variables that needed to be initialized at the same time.
+E.g: 
+
+file, err := os.Create("Hello.txt") // creates file
+// error check
+
+or 
+
+file, _ := os.Create("Hello.txt")
+// no error check
+
+
+You can even use two underscores at the same time!
+
+file, _ := os.Create("Hello.txt")
+_, _ = io.WriteString(file, "Hello World")
+file.Close()

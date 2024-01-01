@@ -1,0 +1,157 @@
+Here's some code you did in Golang during reset at Wrenn. 
+
+
+Black mesa hiring system:
+
+```
+package main
+
+import "fmt"
+
+func main() {
+      var firstname, lastname, password, email string
+
+      fmt.Println("Hello, welcome to the Black Mesa hiring system.")
+      fmt.Println("Please enter your first name here: ")
+      fmt.Scan(&firstname)
+      fmt.Println("\nNow enter your second name: ")
+      fmt.Scan(&lastname)
+
+      var fullname = firstname + " " + lastname
+
+      fmt.Printf("\n\nOkay, %v. Please enter your email below.", fullname)
+      fmt.Scan(&email)
+      fmt.Println("\n\nEnter the password for", email, ". ")
+      fmt.Scan(&password)
+
+}
+```
+
+Slices practice:
+
+```
+package main
+
+import "fmt"
+
+func main() {
+
+      var slice1 = []string{"I am a slice!", "Reset is boring, Golang is cool!"} // this slice has 3 elements, indexes: 0, 1, 2
+      slice1 = append(slice1, "Hello")
+
+      fmt.Println(slice1)
+      fmt.Println(slice1[2])
+}
+```
+
+Maps practice:
+
+```
+package main
+
+import "fmt"
+
+func main() {
+
+      children := make(map[string]int)
+
+      children["house"] = 1
+      children["form"] = 30
+      children["year"] = 270
+      children["school"] = 500
+
+      highschool := children["school"] * 2
+
+      fmt.Println(highschool) // 1000
+}
+```
+
+Multiple return type functions:
+
+```
+package main
+
+import "fmt"
+
+func vals() (int, int) { // vals takes 0 parameters and returns two values, not one, hence the (int, int)
+      return 3, 7
+}
+
+func main() {
+
+      a, b := vals()
+      fmt.Println(a)
+      fmt.Println(b)
+
+}
+```
+
+Closures or anonymous functions or whatever
+
+```
+package main
+
+import "fmt"
+
+func intSeq() func() int {
+    i := 0
+    return func() int {
+        i++
+        return i
+    }
+}
+
+func main() {
+
+    nextInt := intSeq()
+
+    fmt.Println(nextInt())
+    fmt.Println(nextInt())
+    fmt.Println(nextInt())
+
+    newInts := intSeq()
+    fmt.Println(newInts())
+}
+
+// go supports anonymous functions or something like that, which can form closures
+// anonymous functions are useful when you want to define a function inline without having to name it
+// this function intSeq returns another function, which we define anonymously in the body of intSeq.
+// the returned function closes over the variable i to form a closure.
+// whatever that is lol
+```
+
+Math/Pi:
+
+```
+package main
+
+import (
+      "fmt"
+      "math/Pi"
+)
+
+func main() {
+      fmt.Println(math.Pi * 3.1477 / 22.03)
+      fmt.Println("Pi is: ", math.Pi)
+}
+```
+
+Cool For loop thingy:
+
+```
+package main
+
+import "fmt"
+
+func main() {
+
+      const s = "adasd"
+
+      fmt.Println("Len:", len(s))
+
+      for i := 0; i < len(s); i++ {
+            fmt.Println("I is now: ", i)
+      }
+
+}
+```

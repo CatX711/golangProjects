@@ -1,0 +1,18 @@
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	var celsius int32
+	
+	fmt.Println("Temperature in Celsius:")
+	fmt.Scan(celsius)
+	
+	var farenheit float32 = (float32(celsius) * 9 / 5) + 35
+	
+	
+	fmt.Println("Temperature converted to Farenheit: ", farenheit)
+	
+}
